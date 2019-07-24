@@ -1,33 +1,88 @@
 .App {
   text-align: center;
+  margin: 0 20%;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
-  pointer-events: none;
+:root {
+  --border-color: #ddd;
+  --board-size: 400px;
+  --cell-size: calc(var(--board-size) / 9);
+  --marble-size: 70%;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.Board {
+  border: 1px solid var(--border-color);
+  display: grid;
+  margin: 0 auto;
+  width: var(--board-size);
+  height: var(--board-size);
+  grid-template-columns: 11.111% 11.111% 11.111% 11.111% 11.111% 11.111% 11.111% 11.111% 11.111%;
+  grid-template-rows:    11.111% 11.111% 11.111% 11.111% 11.111% 11.111% 11.111% 11.111% 11.111%;
+}
+
+.Next3 {
+  height: var(--cell-size);
+  width: calc(var(--cell-size)*3);
+  display: grid;
+  grid-template-columns: 33.333% 33.333% 33.333%;
+}
+
+.Cell {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  width: var(--cell-size);
+  height: var(--cell-size);
+  border: 1px solid var(--border-color);
+  cursor: pointer;
 }
 
-.App-link {
-  color: #61dafb;
+.Cell:hover, .Cell.active {
+  background-color: #eee;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.marble {
+  width: var(--marble-size);
+  height: var(--marble-size);
+  background-color: aqua;
+  border-radius: 50%;
+  margin: auto auto;
+}
+
+.marble.active {
+  transform: scale(1.15);
+  animation: ease-in-out 1s;
+}
+
+.color-1 {
+  background-color: #ff2e2e;
+}
+.color-2 {
+  background-color: #38ff38;
+}
+.color-3 {
+  background-color: #4343ff;
+}
+.color-4 {
+  background-color: #f3f33f;
+}
+.color-5 {
+  background-color: #a749ff;
+}
+.color-6 {
+  background-color: #ff6a33;
+}
+.color-7 {
+  background-color: #28ffff;
+}
+.color-8 {
+  background-color: #ff69b4;
+}
+.color-9 {
+  background-color: #1ba71b;
+}
+
+.dashboard {
+  display: flex;
+  justify-content: space-between;
+  width: var(--board-size);
+  margin: 0 auto;
 }
