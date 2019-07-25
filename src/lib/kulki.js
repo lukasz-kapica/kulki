@@ -55,17 +55,39 @@ export function populate(state) {
   return newState;
 }
 
-export function startsFrom(board, row, col) {}
+export function longPaths(board) {
+  const paths = [];
+  const vectors = [
+    [1, 0], // right
+    [1, 1], // right-down
+    [0, 1], // down
+    [-1, 1], // down-left
+  ];
 
-export function establish(state) {
-  const newState = _.cloneDeep(state);
-  const toRemove = [];
-  for (let [row, col] of cartesian(state.board.length)) {
-    if (startsFrom(state.board, row, col)) {
-      toRemove.push([row, col])
+  const inBounds = ([x, y]) => _.inRange(x, 0, board.length) && _.inRange(y, 0, board.length);
+
+  const getEnd = (start, [dx, dy]) => {
+    let pos = [...start];
+    while (inBounds([pos[0]+dx, pos[1]+dy]) && board[pos[0]+dx][pos[1]+dy] === board[start[0]][start[1]]) {
+      pos[0] += dx;
+      pos[1] += dy;
+    }
+    return pos;
+  };
+
+  const getLen = (p, q) => Math.abs(p[0]-q[0]) + Math.abs(p[1]-q[1]);
+
+  for (let start of cartesian(board.length)) {
+    for (let vector of vectors) {
+      const end = getEnd(start, vector);
+      const len = getLen(start, end);
+      if (len >= 5) {
+        paths.push([start, end]);
+      }
     }
   }
 
+  return paths;
 }
 
 export default function() {
