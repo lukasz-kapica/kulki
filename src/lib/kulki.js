@@ -55,16 +55,18 @@ export function populate(state) {
   return newState;
 }
 
-export function longPaths(board) {
-  const paths = [];
+export function removeMarbles(board) {
+  const len = board.length;
+  const visited = getInitialBoard(len);
+
   const vectors = [
-    [1, 0], // right
+    [0, 1], // right
     [1, 1], // right-down
-    [0, 1], // down
-    [-1, 1], // down-left
+    [1, 0], // down
+    [1, -1], // down-left
   ];
 
-  const inBounds = ([x, y]) => _.inRange(x, 0, board.length) && _.inRange(y, 0, board.length);
+  const inBounds = ([x, y]) => _.inRange(x, len) && _.inRange(y, len);
 
   const getEnd = (start, [dx, dy]) => {
     let pos = [...start];
@@ -75,19 +77,39 @@ export function longPaths(board) {
     return pos;
   };
 
-  const getLen = (p, q) => Math.abs(p[0]-q[0]) + Math.abs(p[1]-q[1]);
+  const getLen = (p, q) => Math.max(Math.abs(p[0]-q[0]), Math.abs(p[1]-q[1])) + 1;
 
-  for (let start of cartesian(board.length)) {
+  function* getPoints(start, [dx, dy]) {
+    let pos = [...start];
+    yield [...pos];
+    while (inBounds([pos[0]+dx, pos[1]+dy]) && board[pos[0]+dx][pos[1]+dy] === board[start[0]][start[1]]) {
+      pos[0] += dx;
+      pos[1] += dy;
+      yield [...pos];
+    }
+  }
+
+  for (let start of cartesian(len)) {
     for (let vector of vectors) {
       const end = getEnd(start, vector);
-      const len = getLen(start, end);
-      if (len >= 5) {
-        paths.push([start, end]);
+      const n = getLen(start, end);
+      if (n >= 5) {
+        for (let [row, col] of getPoints(start, vector)) {
+          visited[row][col] = 1;
+        }
       }
     }
   }
 
-  return paths;
+  const newBoard = _.cloneDeep(board);
+
+  for (let [row, col] of cartesian(len)) {
+    if (visited[row][col] === 1) {
+      newBoard[row][col] = 0;
+    }
+  }
+
+  return newBoard;
 }
 
 export default function() {
