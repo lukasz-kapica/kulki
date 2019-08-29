@@ -3,7 +3,7 @@ import _ from 'lodash';
 
 import Board, {Next3} from './Board';
 
-import {getInitialState, populate} from '../lib/kulki';
+import {getInitialState, populate, removeMarbles} from '../lib/kulki';
 
 function Kulki({
   size = 9,
@@ -25,6 +25,7 @@ function Kulki({
     newState.board[to[0]][to[1]] = newState.board[from[0]][from[1]];
     newState.board[from[0]][from[1]] = 0;
     newState.active = null;
+    newState.board = removeMarbles(newState.board);
     setState(populate(newState));
   };
 

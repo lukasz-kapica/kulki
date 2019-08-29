@@ -1,11 +1,9 @@
 import _ from 'lodash';
 
-export function getInitialBoard(size) {
-  return new Array(size).fill(0)
-    .map(() => new Array(size).fill(0));
-}
+export const getInitialBoard = size =>
+  new Array(size).fill(0).map(() => new Array(size).fill(0));
 
-export function getRandomBoard(size, colors) {
+export const getRandomBoard = (size, colors) => {
   const board = getInitialBoard(size);
   for (let row = 0; row < size; row++) {
     for (let col = 0; col < size; col++) {
@@ -17,7 +15,7 @@ export function getRandomBoard(size, colors) {
 
 const getRandomTriple = (colors = 5) => _.times(3, () => _.random(1, colors+1));
 
-export function getInitialState(size = 9, colors = 5) {
+export const getInitialState = (size = 9, colors = 5) => {
   const zeroState = {
     score: 0,
     board: getInitialBoard(size, colors),
@@ -28,7 +26,7 @@ export function getInitialState(size = 9, colors = 5) {
   return populate(zeroState);
 }
 
-function cartesian(n) {
+const cartesian = n => {
   const res = [];
   for (let i = 0; i < n; i++) {
     for (let j = 0; j < n; j++) {
@@ -38,7 +36,7 @@ function cartesian(n) {
   return res;
 }
 
-function getFreeTiles(board, n) {
+const getFreeTiles = (board, n) => {
   const allFree =
     cartesian(board.length)
     .filter(([row, col]) => board[row][col] === 0);
@@ -46,7 +44,7 @@ function getFreeTiles(board, n) {
   return _.shuffle(allFree).slice(0, n);
 }
 
-export function populate(state) {
+export const populate = state => {
   const newState = _.cloneDeep(state);
   const {next3} = state;
   const freeTiles = getFreeTiles(state.board, 3);
@@ -55,7 +53,7 @@ export function populate(state) {
   return newState;
 }
 
-export function removeMarbles(board) {
+export const removeMarbles = board => {
   const len = board.length;
   const visited = getInitialBoard(len);
 
@@ -111,8 +109,3 @@ export function removeMarbles(board) {
 
   return newBoard;
 }
-
-export default function() {
-
-}
-
